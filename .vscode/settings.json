@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.plh": "cpp",
+        "*.tcc": "cpp",
+        "*.ph": "cpp",
+        "*.tlh": "cpp",
+        "*.ipp": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "typeinfo": "cpp"
+    }
+}

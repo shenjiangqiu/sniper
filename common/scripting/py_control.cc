@@ -15,7 +15,22 @@ setROI(PyObject *self, PyObject *args)
 
    Py_RETURN_NONE;
 }
+static PyObject*
+setFixMemoryAdrees(PyObject *self,PyObject *args){
+   int typeNumber;
+   if (!PyArg_ParseTuple(args, "b", &typeNumber))//type 1, type2 ....
+      return NULL;
+   Sim()->getMagicServer()->setFixAdress(true,typeNumber);
 
+   Py_RETURN_NONE;
+}
+static PyObject*
+unsetFixMemoryAdrees(PyObject *self,PyObject *args){
+   
+   Sim()->getMagicServer()->setFixAdress(false);
+
+   Py_RETURN_NONE;
+}
 static PyObject *
 setInstrumentationMode(PyObject *self, PyObject *args)
 {
@@ -69,6 +84,8 @@ simulatorAbort(PyObject *self, PyObject *args)
 
 static PyMethodDef PyControlMethods[] = {
    { "set_roi", setROI, METH_VARARGS, "Set whether or not we are in the ROI" },
+   {"set_fix_memory_adrees",setFixMemoryAdrees,METH_VARARGS,"Start to access fixed memory address"},
+   {"unset_fix_memory_adrees",unsetFixMemoryAdrees,METH_VARARGS,"end to access fixed memory address"},
    { "set_instrumentation_mode", setInstrumentationMode, METH_VARARGS, "Set instrumentation mode" },
    { "set_progress", setProgress, METH_VARARGS, "Set simulation progress indicator (0..1)" },
    { "abort", simulatorAbort, METH_VARARGS, "Stop simulation now" },

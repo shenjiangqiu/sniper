@@ -34,10 +34,17 @@ class MagicServer
       UInt64 setInstrumentationMode(UInt64 sim_api_opt);
 
       void setProgress(float progress) { m_progress.setProgress(progress); }
-
+      void setFixAdress(bool set,unsigned char fix_address=-1){
+         //printf("set  %d %d\n",set,fix_address);
+         is_fix_address=set;
+         fix_address_number=fix_address;
+      }
+      
    private:
       bool m_performance_enabled;
       Progress m_progress;
+      bool is_fix_address;
+      unsigned char fix_address_number;
 };
 
 #endif // SYNC_SERVER_H

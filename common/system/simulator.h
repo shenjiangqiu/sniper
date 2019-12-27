@@ -33,10 +33,11 @@ namespace config { class Config; }
 
 class Simulator
 {
-public:
+
+private:
    Simulator();
    ~Simulator();
-
+public:
    void start();
 
    static Simulator* getSingleton() { return m_singleton; }
