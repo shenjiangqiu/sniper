@@ -61,3 +61,5 @@ mbuild
 # Pin3 output
 frontend/pin-frontend/obj-intel64
 sift/recorder/obj-intel64
+sift/recorder/sift
+frontend/pin-frontend/sift
