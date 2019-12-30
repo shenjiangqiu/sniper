@@ -18,8 +18,11 @@ class RoiIter:
     else:
       args = {}
     self.start_warmup = int(args.get(0, '') or -1)
+    print(self.start_warmup)
     self.start_detailed = int(args.get(1, '') or -1)
+    print(self.start_detailed)
     self.end_detailed = int(args.get(2, '') or -1)
+    print(self.end_detailed)
     self.state = 'init'
   def hook_magic_marker(self, core, thread, a, b, s):
     if self.state == 'done':

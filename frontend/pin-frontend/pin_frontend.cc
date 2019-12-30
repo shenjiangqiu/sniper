@@ -394,9 +394,9 @@ void PinFrontend::traceCallback(TRACE trace, void *v)
 
   for (BBL bbl = bbl_head; BBL_Valid(bbl); bbl = BBL_Next(bbl))
   {
-//// TODO first loop with handle magic, end address
+    //// TODO first loop with handle magic, end address
 
-    for(INS ins = BBL_InsHead(bbl); ; ins = INS_Next(ins))
+    for (INS ins = BBL_InsHead(bbl);; ins = INS_Next(ins))
     {
       // Handle emulated syscalls
       if (INS_IsSyscall(ins))
@@ -408,36 +408,35 @@ void PinFrontend::traceCallback(TRACE trace, void *v)
         break;
     }
 
-// TODO not thread in detail
-//    if (current_mode == Sift::ModeDetailed)
-//    {
-      for(INS ins = BBL_InsHead(bbl); ; ins = INS_Next(ins))
+    // TODO not thread in detail
+    //    if (current_mode == Sift::ModeDetailed)
+    //    {
+    for (INS ins = BBL_InsHead(bbl);; ins = INS_Next(ins))
+    {
+      // For memory instructions, collect all addresses at IPOINT_BEFORE
+      UINT32 num_addresses = addMemoryModeling(ins);
+
+      bool is_branch = INS_IsBranch(ins) && INS_HasFallThrough(ins);
+
+      if (is_branch)
       {
-        // For memory instructions, collect all addresses at IPOINT_BEFORE
-        UINT32 num_addresses = addMemoryModeling(ins);
-
-       bool is_branch = INS_IsBranch(ins) && INS_HasFallThrough(ins);
-
-        if (is_branch)
-        {
-          insertCall(ins, IPOINT_AFTER,        num_addresses, true  /* is_branch */, false /* taken */);
-          insertCall(ins, IPOINT_TAKEN_BRANCH, num_addresses, true  /* is_branch */, true  /* taken */);
-        }
-        else
-        {
-          // Whenever possible, use IPOINT_AFTER as this allows us to process addresses after the application has used them.
-          // This ensures that their logical to physical mapping has been set up.
-          insertCall(ins, INS_HasFallThrough(ins) ? IPOINT_AFTER : IPOINT_BEFORE, num_addresses, false /* is_branch */, false /* taken */);
-        }
-
-        if (ins == BBL_InsTail(bbl))
-          break;
+        insertCall(ins, IPOINT_AFTER, num_addresses, true /* is_branch */, false /* taken */);
+        insertCall(ins, IPOINT_TAKEN_BRANCH, num_addresses, true /* is_branch */, true /* taken */);
       }
-//    }
-// TODO mode memory
-   }
-}
+      else
+      {
+        // Whenever possible, use IPOINT_AFTER as this allows us to process addresses after the application has used them.
+        // This ensures that their logical to physical mapping has been set up.
+        insertCall(ins, INS_HasFallThrough(ins) ? IPOINT_AFTER : IPOINT_BEFORE, num_addresses, false /* is_branch */, false /* taken */);
+      }
 
+      if (ins == BBL_InsTail(bbl))
+        break;
+    }
+    //    }
+    // TODO mode memory
+  }
+}
 
 void PinFrontend::initBaseCB()
 {
