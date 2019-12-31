@@ -39,6 +39,12 @@ class MagicServer
          is_fix_address=set;
          fix_address_number=fix_address;
       }
+      bool isInFixedAdress(){
+         return is_fix_address;
+      }
+      unsigned char inWhichFixAddress(){
+         return fix_address_number;
+      }
       
    private:
       bool m_performance_enabled;

@@ -4,5 +4,5 @@ test.out:test.o
 run:test.out
 	../../run-sniper -n 1 -- ./test.out
 
-run-fixaddress:test.out
-	../../run-sniper --roi --no-cache-warming -n 1 -v -s fixaddress  -- ./test.out
+run-fixaddress:glucose_release
+	../../run-sniper --roi --no-cache-warming -n 1 -v -s fixaddress  -- ./glucose_release ./cnfs/sha1r17m145ABCD.cnf

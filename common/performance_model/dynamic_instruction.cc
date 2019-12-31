@@ -45,6 +45,7 @@ void DynamicInstruction::accessMemory(Core *core)
    {
       if (memory_info[idx].executed && memory_info[idx].hit_where == HitWhere::UNKNOWN)
       {
+         //std::cout<<"SJQ:SNIPER read memory addr:"<<memory_info[idx].addr<<std::endl;
          MemoryResult res = core->accessMemory(
             /*instruction.isAtomic()
                ? (info->type == DynamicInstructionInfo::MEMORY_READ ? Core::LOCK : Core::UNLOCK)
@@ -58,6 +59,7 @@ void DynamicInstruction::accessMemory(Core *core)
          );
          memory_info[idx].latency = res.latency;
          memory_info[idx].hit_where = res.hit_where;
+         //std::cout<<"SJQ:SNIPER hit where?:"<<res.hit_where<<std::endl;
       }
       else
       {

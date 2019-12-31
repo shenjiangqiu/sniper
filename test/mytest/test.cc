@@ -2,21 +2,22 @@
 #include<random>
 #include<iostream>
 int main(){
-    int *a=new int[1000];
-    int *b=new int[1000];
-    int *c=new int[1000];
-    auto eg=std::default_random_engine();
-    auto dist=std::uniform_int_distribution<int>(1,1000);
-
-    for(int i=0;i<1000;i++){
-        a[i]=dist(eg);
-        b[i]=2*dist(eg);
+    SimRoiStart();
+    int *a=new int[10];
+    int *b=new int[10];
+    int *c=new int[10];
+    std::cout<<a<<" "<<b<<" "<<c<<std::endl;
+    for(int i=0;i<10;i++){
+        a[i]=i-1;
+        b[i]=i+1;
+   
         b[i]=b[i]+a[i];
         SimMarker(1,1);
         c[i]=a[i]+b[i];
         SimMarker(2,1);
+
+
     }
-    for(int i=0;i<1000;i++)
-        //std::cout<<"C["<<i<<"]="<<c[i]<<std::endl;
+    SimRoiEnd();    
     return 0;
 }

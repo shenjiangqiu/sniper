@@ -17,6 +17,7 @@
 #include "rng.h"
 #include "routine_tracer.h"
 #include "sim_api.h"
+#include "magic_server.h"
 
 #include "stats.h"
 
@@ -645,7 +646,7 @@ void TraceThread::handleInstructionWarmup(Sift::Instruction &inst, Sift::Instruc
    }
 }
 
-void TraceThread::handleInstructionDetailed(Sift::Instruction &inst, Sift::Instruction &next_inst, PerformanceModel *prfmdl)
+void TraceThread::handleInstructionDetailed(Sift::Instruction &inst, Sift::Instruction &next_inst, PerformanceModel *prfmdl)//sjq detailed handle model
 {
 
    // Set up instruction
@@ -697,7 +698,7 @@ void TraceThread::handleInstructionDetailed(Sift::Instruction &inst, Sift::Instr
 }
 
 void TraceThread::addDetailedMemoryInfo(DynamicInstruction *dynins, Sift::Instruction &inst, const dl::DecodedInst &decoded_inst, uint32_t mem_idx, Operand::Direction op_type, bool is_prefetch, PerformanceModel *prfmdl)
-{
+{//sjq process memory read write here
    UInt64 mem_address;
    // LDP/STP ARM instructions, second element to be ld/st, using the address of the first element
    if (decoded_inst.is_mem_pair() && ((int)mem_idx == inst.num_addresses))  
@@ -710,10 +711,33 @@ void TraceThread::addDetailedMemoryInfo(DynamicInstruction *dynins, Sift::Instru
       assert(mem_idx < inst.num_addresses);
       mem_address = inst.addresses[mem_idx];
    }
+   //std::cout<<"SJQ:SNIPER mem_address:"<<mem_address<<std::endl;
                
    bool no_mapping = false;
    UInt64 pa = va2pa(mem_address, is_prefetch ? &no_mapping : NULL);
-
+   //std::cout << "SJQ:SNIPER pysical_address:" << pa << std::endl;
+   //std::cout << "SJQ:SNIPER no mapping?:" << no_mapping << std::endl;
+   auto is_fixed_address = Sim()->getMagicServer()->isInFixedAdress();
+   unsigned char fixed_number;
+   if (is_fixed_address)
+   {
+      fixed_number = Sim()->getMagicServer()->inWhichFixAddress();
+      switch (fixed_number)
+      {
+      case 1:
+         pa = 123456789;
+         break;
+      case 2:
+         pa = 234567891;
+         break;
+      case 3:
+         pa = 345678912;
+         break;
+      default:
+         pa = 123456789;
+         break;
+      }
+   }
    if (no_mapping)
    {
       dynins->addMemory(
@@ -727,6 +751,7 @@ void TraceThread::addDetailedMemoryInfo(DynamicInstruction *dynins, Sift::Instru
    }
    else
    {
+      //std::cout << "SJQ:SNIPER add dynins pa:" << pa << std::endl;
       dynins->addMemory(
          inst.executed,
          SubsecondTime::Zero(),
