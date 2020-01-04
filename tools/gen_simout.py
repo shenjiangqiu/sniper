@@ -82,6 +82,12 @@ def generate_simout(jobid = None, resultsdir = None, partial = None, output = sy
       ('  misprediction rate', 'branch_predictor.missrate', lambda v: '%.2f%%' % v),
       ('  mpki', 'branch_predictor.mpki', lambda v: '%.2f' % v),
     ]
+    for i in range(20):
+      template +=[
+        (' flagged_correct['+str(i+1)+']','branch_predictor.flagged-num-correct'+str(i+1),str),
+        (' flagged_incorrect['+str(i+1)+']','branch_predictor.flagged-num-incorrect'+str(i+1),str),
+
+      ]
 
   template += [
     ('TLB Summary', '', ''),

@@ -4,11 +4,16 @@
 #include "pentium_m_branch_predictor.h"
 #include "config.hpp"
 #include "stats.h"
-
+#include "magic_server.h"
+#include<string>
 BranchPredictor::BranchPredictor()
    : m_correct_predictions(0)
    , m_incorrect_predictions(0)
 {
+   for(int i=0;i<10;i++){
+      correct_branch_predictions_flaged[i]=0;
+      incorrect_branch_predictions_flaged[i]=0;
+   }
 }
 
 BranchPredictor::BranchPredictor(String name, core_id_t core_id)
@@ -17,10 +22,27 @@ BranchPredictor::BranchPredictor(String name, core_id_t core_id)
 {
   registerStatsMetric(name, core_id, "num-correct", &m_correct_predictions);
   registerStatsMetric(name, core_id, "num-incorrect", &m_incorrect_predictions);
+  
+  for (int i = 0; i < 20; i++)
+  {
+     correct_branch_predictions_flaged[i] = 0;
+     incorrect_branch_predictions_flaged[i] = 0;
+     registerStatsMetric(name,core_id,(std::string("flagged-num-correct")+std::to_string(i+1)).c_str(),&(correct_branch_predictions_flaged[i]));
+     registerStatsMetric(name,core_id,(std::string("flagged-num-incorrect")+std::to_string(i+1)).c_str(),&(incorrect_branch_predictions_flaged[i]));
+  }
 }
 
 BranchPredictor::~BranchPredictor()
-{ }
+{ 
+   std::cout<<"correct predict totoal: "<<m_correct_predictions<<std::endl;
+   for(int i=0;i<10;i++){
+      std::cout<<"correct flaged "<<i+1<<": "<<correct_branch_predictions_flaged[i]<<std::endl;
+   }
+   std::cout<<"incorrect predict totoal: "<<m_incorrect_predictions<<std::endl;
+   for(int i=0;i<10;i++){
+      std::cout<<"correct flaged "<<i+1<<": "<<incorrect_branch_predictions_flaged[i]<<std::endl;
+   }
+}
 
 UInt64 BranchPredictor::m_mispredict_penalty;
 
@@ -74,7 +96,23 @@ void BranchPredictor::resetCounters()
 void BranchPredictor::updateCounters(bool predicted, bool actual)
 {
    if (predicted == actual)
+   {
+
       ++m_correct_predictions;
+      if (Sim()->getMagicServer()->isSetBranchFlag())
+      {
+         assert(Sim()->getMagicServer()->inWhichBranchFlag()-1<20);
+         correct_branch_predictions_flaged[Sim()->getMagicServer()->inWhichBranchFlag()-1]++;
+      }
+   }
    else
+   {
       ++m_incorrect_predictions;
+      if (Sim()->getMagicServer()->isSetBranchFlag())
+      {
+         assert(Sim()->getMagicServer()->inWhichBranchFlag()-1<20);
+
+         incorrect_branch_predictions_flaged[Sim()->getMagicServer()->inWhichBranchFlag()-1]++;
+      }
+   }
 }

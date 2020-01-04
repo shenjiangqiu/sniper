@@ -6,3 +6,6 @@ run:test.out
 
 run-fixaddress:glucose_release
 	../../run-sniper --roi --no-cache-warming -n 1 -v -s fixaddress  -- ./glucose_release ./cnfs/sha1r17m145ABCD.cnf
+run-branch:glucose_release
+	../../run-sniper --roi --no-cache-warming -n 1 -v -s branchflag  -- ./glucose_release ./cnfs/sha1r17m145ABCD.cnf
+

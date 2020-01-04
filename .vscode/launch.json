@@ -8,7 +8,7 @@
             "name": "magic",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sjq/git/sniper/lib/sniper",
+            "program": "/home/sjq/git/sniper/lib/sniper-debug",
             "args": [
                 "-c",
                 "/home/sjq/git/sniper/config/base.cfg",

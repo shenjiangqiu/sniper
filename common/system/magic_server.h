@@ -45,12 +45,26 @@ class MagicServer
       unsigned char inWhichFixAddress(){
          return fix_address_number;
       }
+      void BranchFlag(bool f,int n){//n is from 1 ~ 20
+         //std::cout<<"set branch:"<<f<<", "<<n<<std::endl;
+         is_branch_flag=f;
+         branch_number=n;
+      }
+      bool isSetBranchFlag(){
+         return is_branch_flag;
+      }
+      unsigned char inWhichBranchFlag(){
+         return branch_number;
+      }
       
    private:
       bool m_performance_enabled;
       Progress m_progress;
       bool is_fix_address;
       unsigned char fix_address_number;
+      bool is_branch_flag;
+      unsigned char branch_number;
+
 };
 
 #endif // SYNC_SERVER_H

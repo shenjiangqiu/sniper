@@ -15,7 +15,14 @@ int main(){
         SimMarker(1,1);
         c[i]=a[i]+b[i];
         SimMarker(2,1);
-
+        
+        SimMarker(3,1);
+        if(a[1]==1){
+            a[1]=2;
+        }else{
+            a[1]=1;
+        }
+        SimMarker(3,2);
 
     }
     SimRoiEnd();    

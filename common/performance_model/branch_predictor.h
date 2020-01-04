@@ -29,6 +29,8 @@ protected:
 private:
    UInt64 m_correct_predictions;
    UInt64 m_incorrect_predictions;
+   UInt64 correct_branch_predictions_flaged[20];
+   UInt64 incorrect_branch_predictions_flaged[20];
 
    static UInt64 m_mispredict_penalty;
 };

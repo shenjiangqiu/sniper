@@ -6,3 +6,5 @@ run:test.out
 
 run-fixaddress:test.out
 	../../run-sniper --roi --no-cache-warming -n 1 -v -s fixaddress  -- ./test.out
+run-branchflag:test.out
+	../../run-sniper --roi --no-cache-warming -n 1 -v -s branchflag  -- ./test.out
