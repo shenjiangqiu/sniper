@@ -3,13 +3,16 @@
 #include<iostream>
 int main(){
     SimRoiStart();
-    int *a=new int[10];
-    int *b=new int[10];
-    int *c=new int[10];
+    SimMarker(5,2);
+    int *a=new int[100000];
+    int *b=new int[100000];
+    int *c=new int[100000];
     std::cout<<a<<" "<<b<<" "<<c<<std::endl;
-    for(int i=0;i<10;i++){
+    for(int i=0;i<100000;i++){
         a[i]=i-1;
+        SimMarker(5,1);
         b[i]=i+1;
+        SimMarker(5,2);
    
         b[i]=b[i]+a[i];
         SimMarker(1,1);

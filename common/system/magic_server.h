@@ -28,6 +28,8 @@ class MagicServer
       UInt64 getFrequency(UInt64 core_number);
 
       void enablePerformance();
+      void restartPerformance();
+      void pausePerformance();
       void disablePerformance();
       UInt64 setPerformance(bool enabled);
 
@@ -60,9 +62,9 @@ class MagicServer
    private:
       bool m_performance_enabled;
       Progress m_progress;
-      bool is_fix_address;
+      bool is_fix_address=false;
       unsigned char fix_address_number;
-      bool is_branch_flag;
+      bool is_branch_flag=false;
       unsigned char branch_number;
 
 };

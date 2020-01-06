@@ -99,17 +99,29 @@ simulatorAbort(PyObject *self, PyObject *args)
 
    exit(0);
 }
+static PyObject *roiRestart(PyObject *self, PyObject *args)
+{
+   Sim()->getMagicServer()->restartPerformance();
+   Py_RETURN_NONE; 
+}
+static PyObject *roiPause(PyObject *self, PyObject *args)
+{
+   Sim()->getMagicServer()->pausePerformance();
+   Py_RETURN_NONE; 
+}
 
 static PyMethodDef PyControlMethods[] = {
-   { "set_roi", setROI, METH_VARARGS, "Set whether or not we are in the ROI" },
-   {"set_fix_memory_adrees",setFixMemoryAdrees,METH_VARARGS,"Start to access fixed memory address"},
-   {"unset_fix_memory_adrees",unsetFixMemoryAdrees,METH_VARARGS,"end to access fixed memory address"},
-   {"setBranchFlag",setBranchFlag,METH_VARARGS,"Start to set branch flag"},
-   {"unsetBranchFlag",unsetBranchFlag,METH_VARARGS,"end to set branch flag"},
-   { "set_instrumentation_mode", setInstrumentationMode, METH_VARARGS, "Set instrumentation mode" },
-   { "set_progress", setProgress, METH_VARARGS, "Set simulation progress indicator (0..1)" },
-   { "abort", simulatorAbort, METH_VARARGS, "Stop simulation now" },
-   { NULL, NULL, 0, NULL } /* Sentinel */
+    {"set_roi", setROI, METH_VARARGS, "Set whether or not we are in the ROI"},
+    {"set_fix_memory_adrees", setFixMemoryAdrees, METH_VARARGS, "Start to access fixed memory address"},
+    {"unset_fix_memory_adrees", unsetFixMemoryAdrees, METH_VARARGS, "end to access fixed memory address"},
+    {"setBranchFlag", setBranchFlag, METH_VARARGS, "Start to set branch flag"},
+    {"unsetBranchFlag", unsetBranchFlag, METH_VARARGS, "end to set branch flag"},
+    {"set_instrumentation_mode", setInstrumentationMode, METH_VARARGS, "Set instrumentation mode"},
+    {"set_progress", setProgress, METH_VARARGS, "Set simulation progress indicator (0..1)"},
+    {"abort", simulatorAbort, METH_VARARGS, "Stop simulation now"},
+    {"roiRestart",roiRestart,METH_VARARGS,"roiRestart " },
+    {"roiPause",roiPause,METH_VARARGS,"roiPause " },
+    {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
 void HooksPy::PyControl::setup(void)
