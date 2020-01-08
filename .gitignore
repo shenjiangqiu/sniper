@@ -64,3 +64,12 @@ sift/recorder/obj-intel64
 sift/recorder/sift
 frontend/pin-frontend/sift
 *.out
+sim.scripts.py
+*.gz
+*.cnf
+*.txt
+*.png
+sim.out.*
+.sift_done
+perf.data*
+/lib
