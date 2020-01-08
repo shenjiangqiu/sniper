@@ -16,7 +16,7 @@
 #include "stats.h"
 #include "topology_info.h"
 #include "cheetah_manager.h"
-
+#include"magic_server.h"
 #include <cstring>
 
 #if 0
@@ -200,6 +200,9 @@ Core::accessBranchPredictor(IntPtr eip, bool taken, IntPtr target)
    {
       bool prediction = bp->predict(eip, target);
       bp->update(prediction, taken, eip, target);
+      if(Sim()->getMagicServer()->isSetBranchFlag()){
+         return false;//always let it to be false!
+      }
       return (prediction != taken);
    }
    else

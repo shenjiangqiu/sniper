@@ -34,14 +34,7 @@ BranchPredictor::BranchPredictor(String name, core_id_t core_id)
 
 BranchPredictor::~BranchPredictor()
 { 
-   std::cout<<"correct predict totoal: "<<m_correct_predictions<<std::endl;
-   for(int i=0;i<10;i++){
-      std::cout<<"correct flaged "<<i+1<<": "<<correct_branch_predictions_flaged[i]<<std::endl;
-   }
-   std::cout<<"incorrect predict totoal: "<<m_incorrect_predictions<<std::endl;
-   for(int i=0;i<10;i++){
-      std::cout<<"correct flaged "<<i+1<<": "<<incorrect_branch_predictions_flaged[i]<<std::endl;
-   }
+
 }
 
 UInt64 BranchPredictor::m_mispredict_penalty;
