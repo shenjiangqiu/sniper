@@ -1,5 +1,5 @@
 #!/bin/bash
-files=`cat files.txt`
+files=`cat files.list`
 sniper_root=$HOME/git/sniper
 echo $files
 for file in $files;do
