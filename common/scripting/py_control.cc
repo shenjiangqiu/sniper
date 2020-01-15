@@ -49,6 +49,16 @@ unsetFixMemoryAdrees(PyObject *self,PyObject *args){
 
    Py_RETURN_NONE;
 }
+static PyObject* 
+setBranchFlagHit(PyObject *self,PyObject *args){
+   Sim()->getMagicServer()->setBranchFlagHit(true);
+   Py_RETURN_NONE;
+}
+static PyObject*
+unsetBranchFlagHit(PyObject *self,PyObject *args){
+   Sim()->getMagicServer()->setBranchFlagHit(false);
+   Py_RETURN_NONE;
+}
 static PyObject *
 setInstrumentationMode(PyObject *self, PyObject *args)
 {
@@ -99,16 +109,6 @@ simulatorAbort(PyObject *self, PyObject *args)
 
    exit(0);
 }
-static PyObject *roiRestart(PyObject *self, PyObject *args)
-{
-   Sim()->getMagicServer()->restartPerformance();
-   Py_RETURN_NONE; 
-}
-static PyObject *roiPause(PyObject *self, PyObject *args)
-{
-   Sim()->getMagicServer()->pausePerformance();
-   Py_RETURN_NONE; 
-}
 
 static PyMethodDef PyControlMethods[] = {
     {"set_roi", setROI, METH_VARARGS, "Set whether or not we are in the ROI"},
@@ -119,8 +119,8 @@ static PyMethodDef PyControlMethods[] = {
     {"set_instrumentation_mode", setInstrumentationMode, METH_VARARGS, "Set instrumentation mode"},
     {"set_progress", setProgress, METH_VARARGS, "Set simulation progress indicator (0..1)"},
     {"abort", simulatorAbort, METH_VARARGS, "Stop simulation now"},
-    {"roiRestart",roiRestart,METH_VARARGS,"roiRestart " },
-    {"roiPause",roiPause,METH_VARARGS,"roiPause " },
+    {"setBranchFlagHit", setBranchFlagHit, METH_VARARGS, "setBranchFlagHit"},
+    {"unsetBranchFlagHit", unsetBranchFlagHit, METH_VARARGS, "unsetBranchFlagHit"},
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
 

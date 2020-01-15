@@ -28,8 +28,6 @@ class MagicServer
       UInt64 getFrequency(UInt64 core_number);
 
       void enablePerformance();
-      void restartPerformance();
-      void pausePerformance();
       void disablePerformance();
       UInt64 setPerformance(bool enabled);
 
@@ -58,8 +56,15 @@ class MagicServer
       unsigned char inWhichBranchFlag(){
          return branch_number;
       }
+      void setBranchFlagHit(bool b){
+         branchFlagHit=b;
+      }
+      bool isBranchFlagHit(){
+         return branchFlagHit;
+      }
       
    private:
+      bool branchFlagHit=false;
       bool m_performance_enabled;
       Progress m_progress;
       bool is_fix_address=false;

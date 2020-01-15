@@ -11,12 +11,13 @@
 
 import sim
 
-class pauseroi:
+class SetBranchHit:
   def hook_magic_marker(self, core, thread, a, b, s):
-    if a==5:
-        if b==1:
-            sim.control.roiRestart()
-        elif b==2:
-            sim.control.roiPause()
+    if a==5 and b==1:
+        sim.control.setBranchFlagHit()
+    elif a==5 and b==2:
+        sim.control.unsetBranchFlagHit()
 
-sim.util.register(pauseroi())
+
+
+sim.util.register(SetBranchHit())

@@ -200,8 +200,12 @@ Core::accessBranchPredictor(IntPtr eip, bool taken, IntPtr target)
    {
       bool prediction = bp->predict(eip, target);
       bp->update(prediction, taken, eip, target);
-      if(Sim()->getMagicServer()->isSetBranchFlag()){
+      if(Sim()->getMagicServer()->isBranchFlagHit() and  Sim()->getMagicServer()->isSetBranchFlag()){
+         //std::cout<<"SJQ::SNIPER:: alwasy hit ,returning false\n";
          return false;//always let it to be false!
+      }else{
+         //std::cout<<"SJQ::SNIPER:: not alwasy hit ,returning as-is\n";
+
       }
       return (prediction != taken);
    }

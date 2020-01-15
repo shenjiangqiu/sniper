@@ -126,23 +126,7 @@ void MagicServer::enablePerformance()
    Simulator::enablePerformanceModels();
    Sim()->setInstrumentationMode(InstMode::inst_mode_roi, true /* update_barrier */);
 }
-void MagicServer::pausePerformance()
-{
-   Simulator::disablePerformanceModels();
-   Sim()->setInstrumentationMode(InstMode::inst_mode_end, true /* update_barrier */);
 
-   //std::cout<<"enable pause"<<std::endl;
-   //m_performance_enabled=false;
-
-}
-void MagicServer::restartPerformance()
-{
-   Simulator::enablePerformanceModels();
-   Sim()->setInstrumentationMode(InstMode::inst_mode_roi, true /* update_barrier */);
-
-  //std::cout<<"enable restart"<<std::endl;
-   //m_performance_enabled=true;
-}
 void MagicServer::disablePerformance()
 {
    Simulator::disablePerformanceModels();
