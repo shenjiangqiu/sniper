@@ -10,7 +10,7 @@ MemoryDependencies::~MemoryDependencies()
 {
 }
 
-void MemoryDependencies::setDependencies(DynamicMicroOp &microOp, uint64_t lowestValidSequenceNumber)
+void MemoryDependencies::setDependencies(DynamicMicroOp &microOp, uint64_t lowestValidSequenceNumber)//SJQ handle the memory dependency
 {
    // Remove all entries that are now below lowestValidSequenceNumber
    clean(lowestValidSequenceNumber);

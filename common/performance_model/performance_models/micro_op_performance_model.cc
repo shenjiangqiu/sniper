@@ -150,7 +150,7 @@ void MicroOpPerformanceModel::doSquashing(std::vector<DynamicMicroOp*> &current_
    }
 }
 
-void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
+void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)//SJQ start to handle instruction
 {
    ComponentPeriod insn_period = *(const_cast<ComponentPeriod*>(static_cast<const ComponentPeriod*>(m_elapsed_time)));
    std::vector<DynamicMicroOp*> current_uops;
@@ -165,7 +165,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
    UInt64 num_writes_done = 0;
    UInt64 num_nonmem_done = 0;
 
-   if (dynins->instruction->getMicroOps())
+   if (dynins->instruction->getMicroOps())//SJQ build m_current_uops list
    {
       for(std::vector<const MicroOp*>::const_iterator it = dynins->instruction->getMicroOps()->begin(); it != dynins->instruction->getMicroOps()->end(); it++)
       {
@@ -181,7 +181,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
    size_t load_base_index = SIZE_MAX;
    // Find the first store
    size_t store_base_index = SIZE_MAX;
-   for (size_t m = 0 ; m < m_current_uops.size() ; m++ )
+   for (size_t m = 0 ; m < m_current_uops.size() ; m++ ) // SJQ for every uop, get the index of exec, load , store
    {
       if (m_current_uops[m]->getMicroOp()->isExecute())
       {
@@ -202,7 +202,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 
    }
    // Compute the iCache cost, and add to our cycle time
-   if (Sim()->getConfig()->getEnableICacheModeling())
+   if (Sim()->getConfig()->getEnableICacheModeling())//SJQ build infomation of I-cache latency
    {
       // Sometimes, these aren't real instructions (INST_SPAWN, etc), and therefore, we need to skip these
       if (dynins->instruction->getAddress() && !dynins->instruction->isPseudo() && m_current_uops.size() > 0 )
@@ -225,10 +225,10 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
    unsigned int memidx = 0;
 
    if (m_issue_memops)
-      dynins->accessMemory(getCore());
+      dynins->accessMemory(getCore()); // SJQ access the memory, and record the latency and hitwhere information inside the dynins
 
    // If we haven't gotten all of our read or write data yet, iterate over the operands
-   for (size_t i = 0 ; i < ops.size() ; ++i)
+   for (size_t i = 0 ; i < ops.size() ; ++i)//SJQ the operands' latency?
    {
       const Operand &o = ops[i];
 
@@ -297,7 +297,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
                                 "Expected store_index(%d) to be less than uops.size()(%d).", store_index, m_current_uops.size());
                LOG_ASSERT_ERROR(m_current_uops[store_index]->getMicroOp()->isStore(),
                                 "Expected uop %d to be a store. [%d|%s]", store_index, m_current_uops[store_index]->getMicroOp()->getType(), m_current_uops[store_index]->getMicroOp()->toString().c_str());
-
+               //SJQ merge already sent cache line
                if (std::find(m_cache_lines_written.begin(), m_cache_lines_written.end(), cache_line) != m_cache_lines_written.end())
                {
                   m_current_uops[store_index]->squash(&m_current_uops);
@@ -338,7 +338,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 
    SubsecondTime insn_cost = SubsecondTime::Zero();
 
-   if (dynins->instruction->getType() == INST_BRANCH)
+   if (dynins->instruction->getType() == INST_BRANCH)//SJQ handle branch instruction
    {
       bool is_mispredict;
       dynins->getBranchCost(getCore(), &is_mispredict);

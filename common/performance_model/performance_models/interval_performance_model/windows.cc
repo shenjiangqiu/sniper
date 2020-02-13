@@ -138,7 +138,7 @@ int Windows::windowIndex(const int index) const
 /**
  * Add the microOperation to the window and calculate its dependencies.
  */
-void Windows::add(DynamicMicroOp* micro_op)
+void Windows::add(DynamicMicroOp* micro_op)// SJQ add!! important
 {
    LOG_ASSERT_ERROR(!wIsFull(), "Window is full");
 
@@ -148,10 +148,10 @@ void Windows::add(DynamicMicroOp* micro_op)
    micro_op->setSequenceNumber(m_next_sequence_number);
    m_next_sequence_number++;
 
-   entry.initialize(micro_op);
+   entry.initialize(micro_op);//SJQ just set this uop
 
    uint64_t lowestValidSequenceNumber = getInstructionByIndex(m_old_window_head).getSequenceNumber();
-   m_register_dependencies->setDependencies(*micro_op, lowestValidSequenceNumber);
+   m_register_dependencies->setDependencies(*micro_op, lowestValidSequenceNumber);//SJQ set dependency status, and set micro_op dependency
    m_memory_dependencies->setDependencies(*micro_op, lowestValidSequenceNumber);
 }
 

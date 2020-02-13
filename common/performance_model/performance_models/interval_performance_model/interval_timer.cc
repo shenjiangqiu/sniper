@@ -177,11 +177,11 @@ void IntervalTimer::free()
 }
 
 // Simulate a collection of micro-ops and report the number of instructions executed and the latency
-boost::tuple<uint64_t,uint64_t> IntervalTimer::simulate(const std::vector<DynamicMicroOp*>& insts)
+boost::tuple<uint64_t,uint64_t> IntervalTimer::simulate(const std::vector<DynamicMicroOp*>& insts)// SJQ interval model simulation
 {
    uint64_t total_instructions_executed = 0, total_latency = 0;
 
-   for (std::vector<DynamicMicroOp*>::const_iterator i = insts.begin() ; i != insts.end(); ++i )
+   for (std::vector<DynamicMicroOp*>::const_iterator i = insts.begin() ; i != insts.end(); ++i )//SJQ the uops
    {
       if ((*i)->isSquashed())
       {
@@ -197,7 +197,7 @@ boost::tuple<uint64_t,uint64_t> IntervalTimer::simulate(const std::vector<Dynami
          (*i)->setAddress(addr);
       }
 
-      m_windows->add(*i);
+      m_windows->add(*i);//SJQ simply add to entry, and set dependency infomation
       m_uop_type_count[(*i)->getMicroOp()->getSubtype()]++;
       m_uops_total++;
       if ((*i)->getMicroOp()->isX87()) m_uops_x87++;
@@ -222,7 +222,7 @@ boost::tuple<uint64_t,uint64_t> IntervalTimer::simulate(const std::vector<Dynami
    return boost::tuple<uint64_t,uint64_t>(total_instructions_executed, total_latency);
 }
 
-boost::tuple<uint64_t, uint64_t> IntervalTimer::dispatchWindow() {
+boost::tuple<uint64_t, uint64_t> IntervalTimer::dispatchWindow() { // SJQ dispatchWindow
    uint64_t instructions_executed = 0;
    uint64_t latency = 0;
    uint64_t micro_ops_executed = 0;
@@ -353,7 +353,7 @@ void IntervalTimer::issueMemOp(Windows::WindowEntry& micro_op)
    }
 }
 
-uint64_t IntervalTimer::dispatchInstruction(Windows::WindowEntry& micro_op, StopDispatchReason& continue_dispatching)
+uint64_t IntervalTimer::dispatchInstruction(Windows::WindowEntry& micro_op, StopDispatchReason& continue_dispatching)// SJQ dispatch instruction
 {
    // If it's not already done, issue the memory operation
    issueMemOp(micro_op);

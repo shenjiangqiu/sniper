@@ -6,7 +6,7 @@ RegisterDependencies::RegisterDependencies()
    clear();
 }
 
-void RegisterDependencies::setDependencies(DynamicMicroOp& microOp, uint64_t lowestValidSequenceNumber)
+void RegisterDependencies::setDependencies(DynamicMicroOp& microOp, uint64_t lowestValidSequenceNumber) //SJQ handle the register dependency  
 {
    // Create the dependencies for the microOp
    for(uint32_t i = 0; i < microOp.getMicroOp()->getSourceRegistersLength(); i++)

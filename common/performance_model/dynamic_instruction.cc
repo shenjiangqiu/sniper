@@ -39,7 +39,7 @@ SubsecondTime DynamicInstruction::getBranchCost(Core *core, bool *p_is_mispredic
    return static_cast<SubsecondTime>(*period) * cost;
 }
 
-void DynamicInstruction::accessMemory(Core *core)
+void DynamicInstruction::accessMemory(Core *core) //SJQ access memory
 {
    for(UInt8 idx = 0; idx < num_memory; ++idx)
    {
