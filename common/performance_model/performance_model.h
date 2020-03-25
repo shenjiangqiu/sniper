@@ -8,10 +8,10 @@
 #include "subsecond_time.h"
 #include "instruction_tracer.h"
 #include "hit_where.h"
-
+#include "magic_server.h"
 #include <queue>
 #include <iostream>
-
+#include "simulator.h"
 // Forward Decls
 class Core;
 class BranchPredictor;
@@ -36,6 +36,8 @@ public:
    UInt64 getInstructionCount() const { return m_instruction_count; }
 
    SubsecondTime getElapsedTime() const { return m_elapsed_time.getElapsedTime(); }
+   SubsecondTime getElapsedTimeBcp() const { return m_elapsed_time_in_bcp.getElapsedTime(); }
+
    SubsecondTime getNonIdleElapsedTime() const { return getElapsedTime() - m_idle_elapsed_time.getElapsedTime(); }
 
    void countInstructions(IntPtr address, UInt32 count);
@@ -88,7 +90,14 @@ protected:
    friend class FastforwardPerformanceModel;
 
    void setElapsedTime(SubsecondTime time);
-   void incrementElapsedTime(SubsecondTime time) { m_elapsed_time.addLatency(time); }
+   void incrementElapsedTime(SubsecondTime time)
+   {
+      m_elapsed_time.addLatency(time);
+      if (Sim()->getMagicServer()->is_in_bcp())
+      {
+         m_elapsed_time_in_bcp.addLatency(time);
+      }
+   }
    void incrementIdleElapsedTime(SubsecondTime time);
 
    #ifdef ENABLE_PERF_MODEL_OWN_THREAD
@@ -124,10 +133,13 @@ private:
 
 protected:
    UInt64 m_instruction_count;
-
    ComponentTime m_elapsed_time;
+   ComponentTime m_elapsed_time_in_bcp;
+   
 private:
    ComponentTime m_idle_elapsed_time;
+   ComponentTime m_idle_elapsed_time_in_bcp;
+
 
    SubsecondTime m_cpiStartTime;
    // CPI components for Sync and Recv instructions

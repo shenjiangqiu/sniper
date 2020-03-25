@@ -27,6 +27,22 @@ class MagicServer
       UInt64 setFrequency(UInt64 core_number, UInt64 freq_in_mhz);
       UInt64 getFrequency(UInt64 core_number);
 
+      void startBcp(){
+         in_bcp=true;
+      }
+      void exitBcp(){
+         in_bcp=false;
+      }
+      bool is_in_bcp(){
+         return in_bcp;
+      }
+      bool is_print_cycle=false;
+      void printCycle()
+      {
+         std::cout << "SNIPER::MAGICSERVER::PRINT" << std::endl;
+         is_print_cycle = true;
+      }
+      void disablePrintCycle(){ is_print_cycle=false;}
       void enablePerformance();
       void disablePerformance();
       UInt64 setPerformance(bool enabled);
@@ -38,6 +54,7 @@ class MagicServer
    private:
       bool m_performance_enabled;
       Progress m_progress;
+      bool in_bcp=false;
 };
 
 #endif // SYNC_SERVER_H

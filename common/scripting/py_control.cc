@@ -66,13 +66,37 @@ simulatorAbort(PyObject *self, PyObject *args)
 
    exit(0);
 }
+static PyObject *
+startBcp(PyObject *self, PyObject *args)
+{
+   Sim()->getMagicServer()->startBcp();
+
+   Py_RETURN_NONE;
+}
+static PyObject *
+exitBcp(PyObject *self, PyObject *args)
+{
+   Sim()->getMagicServer()->exitBcp();
+
+   Py_RETURN_NONE;
+}
+static PyObject *
+printCycle(PyObject *self, PyObject *args)
+{
+   std::cout <<"SNIPER::PYCONTROL::PRINT"<<std::endl;
+   Sim()->getMagicServer()->printCycle();
+   Py_RETURN_NONE;
+}
 
 static PyMethodDef PyControlMethods[] = {
-   { "set_roi", setROI, METH_VARARGS, "Set whether or not we are in the ROI" },
-   { "set_instrumentation_mode", setInstrumentationMode, METH_VARARGS, "Set instrumentation mode" },
-   { "set_progress", setProgress, METH_VARARGS, "Set simulation progress indicator (0..1)" },
-   { "abort", simulatorAbort, METH_VARARGS, "Stop simulation now" },
-   { NULL, NULL, 0, NULL } /* Sentinel */
+    {"set_roi", setROI, METH_VARARGS, "Set whether or not we are in the ROI"},
+    {"set_instrumentation_mode", setInstrumentationMode, METH_VARARGS, "Set instrumentation mode"},
+    {"set_progress", setProgress, METH_VARARGS, "Set simulation progress indicator (0..1)"},
+    {"abort", simulatorAbort, METH_VARARGS, "Stop simulation now"},
+    {"startBcp", startBcp, METH_VARARGS, "METH_VARARGS"},
+    {"exitBcp", exitBcp, METH_VARARGS, "METH_VARARGS"},
+    {"printCycle", printCycle, METH_VARARGS, "METH_VARARGS"},
+    {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
 void HooksPy::PyControl::setup(void)

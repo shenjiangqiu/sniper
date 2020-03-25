@@ -69,6 +69,14 @@ public:
    SubsecondTime(const SubsecondTime &_time)
       : m_time(_time.m_time)
    {}
+   SubsecondTime& operator = (const SubsecondTime& other){
+      m_time=other.m_time;
+      return *this;
+   }
+   SubsecondTime& operator = (SubsecondTime&& other){
+      m_time=other.m_time;
+      return *this;
+   }
    SubsecondTime(uint64_t multiplier, const SubsecondTime &_time)
       : m_time(_time.m_time * multiplier)
    {}

@@ -4,6 +4,7 @@ import sim
 class Marker:
   def setup(self, args):
     args = (args or '').split(':')
+    print(args)
     self.write_terminal = 'verbose' in args
     self.write_markers = 'markers' in args
     self.write_stats = 'stats' in args

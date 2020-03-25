@@ -58,7 +58,9 @@ PerformanceModel::PerformanceModel(Core *core)
    , m_hold(false)
    , m_instruction_count(0)
    , m_elapsed_time(Sim()->getDvfsManager()->getCoreDomain(core->getId()))
+   , m_elapsed_time_in_bcp(Sim()->getDvfsManager()->getCoreDomain(core->getId()))
    , m_idle_elapsed_time(Sim()->getDvfsManager()->getCoreDomain(core->getId()))
+   ,m_idle_elapsed_time_in_bcp(Sim()->getDvfsManager()->getCoreDomain(core->getId()))
    #ifdef ENABLE_PERF_MODEL_OWN_THREAD
    , m_instruction_queue(256) // Reduce from default size to keep memory issue time more or less synchronized
    #else
@@ -73,6 +75,10 @@ PerformanceModel::PerformanceModel(Core *core)
    registerStatsMetric("performance_model", core->getId(), "instruction_count", &m_instruction_count);
 
    registerStatsMetric("performance_model", core->getId(), "elapsed_time", &m_elapsed_time);
+   std::cout<<"SJQ::setup"<<std::endl;
+   std::cout<<"coreID"<<core->getId()<<std::endl;
+   registerStatsMetric("performance_model", core->getId(), "elapsed_time_in_bcp", &m_elapsed_time_in_bcp);
+
    registerStatsMetric("performance_model", core->getId(), "idle_elapsed_time", &m_idle_elapsed_time);
 
    registerStatsMetric("performance_model", core->getId(), "cpiStartTime", &m_cpiStartTime);
@@ -202,6 +208,12 @@ void PerformanceModel::queueInstruction(DynamicInstruction *ins)
 
 void PerformanceModel::handleIdleInstruction(PseudoInstruction *instruction)
 {
+   if(Sim()->getMagicServer()->is_print_cycle)
+   {
+      std::cout << "SNIPER::CURRENT::TOTOAL::TIME: " << getElapsedTime().getMS() << " ms" << std::endl;
+      std::cout << "SNIPER::CURRENT::BCP::TIME: " << getElapsedTimeBcp().getMS() << " ms" << std::endl;
+      Sim()->getMagicServer()->is_print_cycle = false;
+   }
    // If fast-forwarding without detailed synchronization, our fast-forwarding IPC
    // already contains idle periods so we can ignore these now
    if (m_fastforward && !m_detailed_sync)
@@ -326,7 +338,11 @@ void PerformanceModel::synchronize()
 void PerformanceModel::incrementIdleElapsedTime(SubsecondTime time)
 {
    // Advance the idle time
+
    m_idle_elapsed_time.addLatency(time);
+   if(Sim()->getMagicServer()->is_in_bcp()){
+      m_idle_elapsed_time_in_bcp.addLatency(time);
+   }
    // Advance the total (non-idle + idle) time
    incrementElapsedTime(time);
    // Let the performance model know time has jumped

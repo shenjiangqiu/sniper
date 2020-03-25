@@ -44,6 +44,10 @@ def generate_simout(jobid = None, resultsdir = None, partial = None, output = sy
     results['performance_model.elapsed_time_fixed'][c] * results['fs_to_cycles_cores'][c]
     for c in range(ncores)
   ]
+  results['performance_model.cycle_count_fixed_BCP'] = [
+    results['performance_model.elapsed_time_in_bcp'][c] * results['fs_to_cycles_cores'][c]
+    for c in range(ncores)
+  ]
   results['performance_model.ipc'] = [
     i / (c or 1)
     for i, c in zip(results['performance_model.instruction_count'], results['performance_model.cycle_count_fixed'])
@@ -64,8 +68,10 @@ def generate_simout(jobid = None, resultsdir = None, partial = None, output = sy
   template = [
     ('  Instructions', 'performance_model.instruction_count', str),
     ('  Cycles',       'performance_model.cycle_count_fixed', format_int),
+    ('  Cycles_BCP',       'performance_model.cycle_count_fixed_BCP', format_int),
     ('  IPC',          'performance_model.ipc', format_float(2)),
     ('  Time (ns)',    'performance_model.elapsed_time_fixed', format_ns(0)),
+    ('  Time in BCP (ns)',    'performance_model.elapsed_time_in_bcp', format_ns(0)),
     ('  Idle time (ns)', 'performance_model.idle_elapsed_time', format_ns(0)),
     ('  Idle time (%)',  'performance_model.idle_elapsed_percent', format_pct),
   ]

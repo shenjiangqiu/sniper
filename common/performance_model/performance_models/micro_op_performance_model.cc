@@ -11,7 +11,7 @@
 #include "allocator.h"
 #include "config.hpp"
 #include "dynamic_instruction.h"
-
+#include"magic_server.h"
 #include <cstdio>
 #include <algorithm>
 
@@ -558,6 +558,9 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)//SJQ
    }
    m_instruction_count += new_num_insns;
    m_elapsed_time.addLatency(new_latency);
+   if(Sim()->getMagicServer()->is_in_bcp()){
+      m_elapsed_time_in_bcp.addLatency(new_latency);
+   }
    if (latency_out_of_band)
       notifyElapsedTimeUpdate();
 
